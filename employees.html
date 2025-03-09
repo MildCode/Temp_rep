@@ -1,0 +1,327 @@
+{% extends "layout.html" %}
+
+{% block title %}Employee Management - Gujarat Ministry of Defence{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h3">Employee Management</h1>
+    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addEmployeeModal">
+        <i class="fas fa-user-plus"></i> Add New Employee
+    </button>
+</div>
+
+<div class="card mb-4">
+    <div class="card-header bg-primary text-white">
+        <div class="d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">Employee Directory</h5>
+            <div class="input-group input-group-sm" style="width: 250px;">
+                <input type="text" class="form-control" id="employeeSearch" placeholder="Search employees...">
+                <button class="btn btn-light" type="button" id="employeeSearchBtn">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0" id="employeesTable">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Position</th>
+                        <th>Department</th>
+                        <th>Contact</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="employeesList">
+                    <tr>
+                        <td colspan="7" class="text-center py-4">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                            <p class="mt-2">Loading employee data...</p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="card-footer">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <span id="employeeCount">0</span> employees found
+            </div>
+            <div>
+                <button class="btn btn-sm btn-outline-secondary me-2" id="exportEmployees">
+                    <i class="fas fa-file-export"></i> Export
+                </button>
+                <button class="btn btn-sm btn-outline-primary" id="printEmployees">
+                    <i class="fas fa-print"></i> Print
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6 mb-4">
+        <div class="card">
+            <div class="card-header bg-info text-white">
+                <h5 class="mb-0">Department Distribution</h5>
+            </div>
+            <div class="card-body" style="height: 300px;">
+                <canvas id="departmentChart"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 mb-4">
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0">Employee Status</h5>
+            </div>
+            <div class="card-body" style="height: 300px;">
+                <canvas id="statusChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add Employee Modal -->
+<div class="modal fade" id="addEmployeeModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title">Add New Employee</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="addEmployeeForm">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="employeeId" class="form-label">Employee ID</label>
+                            <input type="text" class="form-control" id="employeeId" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="employeeName" class="form-label">Full Name</label>
+                            <input type="text" class="form-control" id="employeeName" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="employeePosition" class="form-label">Position</label>
+                            <input type="text" class="form-control" id="employeePosition" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="employeeDepartment" class="form-label">Department</label>
+                            <select class="form-select" id="employeeDepartment" required>
+                                <option value="">Select Department</option>
+                                <option value="Administration">Administration</option>
+                                <option value="Operations">Operations</option>
+                                <option value="Intelligence">Intelligence</option>
+                                <option value="Logistics">Logistics</option>
+                                <option value="Communications">Communications</option>
+                                <option value="IT">IT</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="employeeEmail" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="employeeEmail" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="employeePhone" class="form-label">Phone</label>
+                            <input type="tel" class="form-control" id="employeePhone" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="employeeJoinDate" class="form-label">Join Date</label>
+                            <input type="date" class="form-control" id="employeeJoinDate" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="employeeStatus" class="form-label">Status</label>
+                            <select class="form-select" id="employeeStatus" required>
+                                <option value="Active">Active</option>
+                                <option value="On Leave">On Leave</option>
+                                <option value="Transferred">Transferred</option>
+                                <option value="Suspended">Suspended</option>
+                                <option value="Retired">Retired</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="employeeAddress" class="form-label">Address</label>
+                        <textarea class="form-control" id="employeeAddress" rows="2"></textarea>
+                    </div>
+                    <div class="alert alert-info">
+                        <small>All employee information is considered confidential and is subject to Ministry of Defence privacy regulations.</small>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="saveEmployeeBtn">Save Employee</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Employee Modal -->
+<div class="modal fade" id="editEmployeeModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title">Edit Employee</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editEmployeeForm">
+                    <input type="hidden" id="editEmployeeIndex">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="editEmployeeId" class="form-label">Employee ID</label>
+                            <input type="text" class="form-control" id="editEmployeeId" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="editEmployeeName" class="form-label">Full Name</label>
+                            <input type="text" class="form-control" id="editEmployeeName" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="editEmployeePosition" class="form-label">Position</label>
+                            <input type="text" class="form-control" id="editEmployeePosition" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="editEmployeeDepartment" class="form-label">Department</label>
+                            <select class="form-select" id="editEmployeeDepartment" required>
+                                <option value="">Select Department</option>
+                                <option value="Administration">Administration</option>
+                                <option value="Operations">Operations</option>
+                                <option value="Intelligence">Intelligence</option>
+                                <option value="Logistics">Logistics</option>
+                                <option value="Communications">Communications</option>
+                                <option value="IT">IT</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="editEmployeeEmail" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="editEmployeeEmail" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="editEmployeePhone" class="form-label">Phone</label>
+                            <input type="tel" class="form-control" id="editEmployeePhone" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="editEmployeeJoinDate" class="form-label">Join Date</label>
+                            <input type="date" class="form-control" id="editEmployeeJoinDate" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="editEmployeeStatus" class="form-label">Status</label>
+                            <select class="form-select" id="editEmployeeStatus" required>
+                                <option value="Active">Active</option>
+                                <option value="On Leave">On Leave</option>
+                                <option value="Transferred">Transferred</option>
+                                <option value="Suspended">Suspended</option>
+                                <option value="Retired">Retired</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editEmployeeAddress" class="form-label">Address</label>
+                        <textarea class="form-control" id="editEmployeeAddress" rows="2"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger me-auto" id="deleteEmployeeBtn">Delete Employee</button>
+                <button type="button" class="btn btn-primary" id="updateEmployeeBtn">Update Employee</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- View Employee Details Modal -->
+<div class="modal fade" id="viewEmployeeModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-info text-white">
+                <h5 class="modal-title">Employee Details</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="text-center mb-3">
+                    <div class="rounded-circle bg-secondary d-inline-flex justify-content-center align-items-center mb-3" style="width: 80px; height: 80px;">
+                        <i class="fas fa-user fa-3x text-white"></i>
+                    </div>
+                    <h4 id="viewEmployeeName">--</h4>
+                    <p class="text-muted" id="viewEmployeePosition">--</p>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <p><strong>ID:</strong> <span id="viewEmployeeId">--</span></p>
+                        <p><strong>Department:</strong> <span id="viewEmployeeDepartment">--</span></p>
+                        <p><strong>Join Date:</strong> <span id="viewEmployeeJoinDate">--</span></p>
+                    </div>
+                    <div class="col-6">
+                        <p><strong>Email:</strong> <span id="viewEmployeeEmail">--</span></p>
+                        <p><strong>Phone:</strong> <span id="viewEmployeePhone">--</span></p>
+                        <p><strong>Status:</strong> <span id="viewEmployeeStatus">--</span></p>
+                    </div>
+                </div>
+                <div>
+                    <p><strong>Address:</strong></p>
+                    <p id="viewEmployeeAddress">--</p>
+                </div>
+                <hr>
+                <div>
+                    <h6>Current Tasks</h6>
+                    <ul class="list-group" id="viewEmployeeTasks">
+                        <li class="list-group-item text-center text-muted">No tasks assigned</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="employeeEditBtn">Edit Details</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title">Confirm Deletion</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete this employee? This action cannot be undone.</p>
+                <p><strong>Employee:</strong> <span id="deleteEmployeeName">--</span></p>
+                <div class="alert alert-warning">
+                    <i class="fas fa-exclamation-triangle"></i> Warning: Deleting this employee will also remove any assigned tasks.
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Delete Permanently</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/employees.js') }}"></script>
+{% endblock %}

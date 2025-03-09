@@ -1,0 +1,326 @@
+{% extends "layout.html" %}
+
+{% block title %}Home - Gujarat Ministry of Defence{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="alert alert-primary mb-4" role="alert">
+            <strong>Welcome to the Gujarat Ministry of Defence HOD Department Portal.</strong> This system helps HOD officials manage employees and tasks efficiently.
+        </div>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h2 class="h5 mb-0">Dashboard Overview</h2>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <div class="card bg-light">
+                            <div class="card-body text-center">
+                                <i class="fas fa-tasks fa-2x mb-3 text-primary"></i>
+                                <h3 class="h5" id="total-tasks">-- Tasks</h3>
+                                <p class="small mb-0">Total assigned tasks</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="card bg-light">
+                            <div class="card-body text-center">
+                                <i class="fas fa-users fa-2x mb-3 text-primary"></i>
+                                <h3 class="h5" id="total-employees">-- Employees</h3>
+                                <p class="small mb-0">Registered in the system</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="card bg-light">
+                            <div class="card-body text-center">
+                                <i class="fas fa-check-circle fa-2x mb-3 text-success"></i>
+                                <h3 class="h5" id="completed-tasks">-- Completed</h3>
+                                <p class="small mb-0">Tasks completed</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="card bg-light">
+                            <div class="card-body text-center">
+                                <i class="fas fa-calendar-alt fa-2x mb-3 text-warning"></i>
+                                <h3 class="h5" id="pending-tasks">-- Pending</h3>
+                                <p class="small mb-0">Tasks in progress</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center mt-3">
+                    <a href="/dashboard" class="btn btn-primary">View Full Dashboard</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header bg-info text-white">
+                <h2 class="h5 mb-0">Latest Announcements</h2>
+            </div>
+            <div class="card-body p-0">
+                <ul class="list-group list-group-flush" id="recent-announcements">
+                    <li class="list-group-item py-3 text-center">
+                        <div class="spinner-border spinner-border-sm text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <span class="ms-2">Loading announcements...</span>
+                    </li>
+                </ul>
+            </div>
+            <div class="card-footer text-center">
+                <a href="/announcements" class="btn btn-sm btn-info">View All Announcements</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6 mb-4">
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                <h2 class="h5 mb-0">Recent Tasks</h2>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead>
+                            <tr>
+                                <th>Task</th>
+                                <th>Assigned To</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="recent-tasks">
+                            <tr>
+                                <td colspan="3" class="text-center py-3">
+                                    <div class="spinner-border spinner-border-sm text-primary" role="status">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                    <span class="ms-2">Loading tasks...</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="card-footer text-center">
+                <a href="/tasks" class="btn btn-sm btn-success">Manage Tasks</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 mb-4">
+        <div class="card">
+            <div class="card-header bg-secondary text-white">
+                <h2 class="h5 mb-0">Employee Status</h2>
+            </div>
+            <div class="card-body">
+                <canvas id="employee-task-chart" height="200"></canvas>
+            </div>
+            <div class="card-footer text-center">
+                <a href="/employees" class="btn btn-sm btn-secondary">Manage Employees</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header bg-dark text-white">
+                <h2 class="h5 mb-0">About HOD Department</h2>
+            </div>
+            <div class="card-body">
+                <p>The HOD (Head of Department) division of the Gujarat Ministry of Defence is responsible for overseeing various defense-related operations within the state. This portal provides administrative tools for:</p>
+                <div class="row">
+                    <div class="col-md-6">
+                        <ul>
+                            <li>Managing employee information and records</li>
+                            <li>Assigning and tracking department tasks</li>
+                            <li>Monitoring project progress through visual dashboards</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <ul>
+                            <li>Publishing important announcements</li>
+                            <li>Generating status reports and analytics</li>
+                            <li>Coordinating between different defense units</li>
+                        </ul>
+                    </div>
+                </div>
+                <p class="mb-0">For additional information or support, please contact the IT department or refer to the administration manual.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Load dashboard data
+        loadDashboardData();
+        
+        // Load recent announcements
+        loadRecentAnnouncements();
+        
+        // Load recent tasks
+        loadRecentTasks();
+        
+        // Initialize employee task chart
+        initEmployeeTaskChart();
+    });
+    
+    function loadDashboardData() {
+        // In a real application, this would fetch from an API
+        // For now, we'll use localStorage if available
+        
+        const totalTasks = localStorage.getItem('totalTasks') || 0;
+        const totalEmployees = localStorage.getItem('totalEmployees') || 0;
+        const completedTasks = localStorage.getItem('completedTasks') || 0;
+        const pendingTasks = totalTasks - completedTasks;
+        
+        document.getElementById('total-tasks').textContent = totalTasks + ' Tasks';
+        document.getElementById('total-employees').textContent = totalEmployees + ' Employees';
+        document.getElementById('completed-tasks').textContent = completedTasks + ' Completed';
+        document.getElementById('pending-tasks').textContent = pendingTasks + ' Pending';
+    }
+    
+    function loadRecentAnnouncements() {
+        const announcements = JSON.parse(localStorage.getItem('announcements')) || [];
+        const recentAnnouncementsEl = document.getElementById('recent-announcements');
+        
+        if (announcements.length === 0) {
+            recentAnnouncementsEl.innerHTML = `
+                <li class="list-group-item py-3">
+                    <div class="text-center text-muted">
+                        <i class="fas fa-info-circle mb-2"></i>
+                        <p class="mb-0">No announcements available</p>
+                    </div>
+                </li>
+            `;
+            return;
+        }
+        
+        let html = '';
+        const recentAnnouncements = announcements.slice(0, 3);
+        
+        recentAnnouncements.forEach(announcement => {
+            html += `
+                <li class="list-group-item py-3">
+                    <h6 class="mb-1">${announcement.title}</h6>
+                    <p class="mb-1 small">${announcement.content.substring(0, 80)}${announcement.content.length > 80 ? '...' : ''}</p>
+                    <div class="small text-muted">
+                        <i class="fas fa-calendar-alt"></i> ${new Date(announcement.date).toLocaleDateString()}
+                    </div>
+                </li>
+            `;
+        });
+        
+        recentAnnouncementsEl.innerHTML = html;
+    }
+    
+    function loadRecentTasks() {
+        const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+        const recentTasksEl = document.getElementById('recent-tasks');
+        
+        if (tasks.length === 0) {
+            recentTasksEl.innerHTML = `
+                <tr>
+                    <td colspan="3" class="text-center py-3">
+                        <div class="text-muted">
+                            <i class="fas fa-clipboard-list mb-2"></i>
+                            <p class="mb-0">No tasks available</p>
+                        </div>
+                    </td>
+                </tr>
+            `;
+            return;
+        }
+        
+        let html = '';
+        const recentTasks = tasks.slice(0, 5);
+        
+        recentTasks.forEach(task => {
+            const statusClass = task.status === 'Completed' ? 'success' : 
+                              task.status === 'In Progress' ? 'warning' : 'secondary';
+            
+            html += `
+                <tr>
+                    <td>${task.title}</td>
+                    <td>${task.assignedTo}</td>
+                    <td><span class="badge bg-${statusClass}">${task.status}</span></td>
+                </tr>
+            `;
+        });
+        
+        recentTasksEl.innerHTML = html;
+    }
+    
+    function initEmployeeTaskChart() {
+        const employees = JSON.parse(localStorage.getItem('employees')) || [];
+        const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+        
+        // If no data, display a message
+        if (employees.length === 0 || tasks.length === 0) {
+            document.getElementById('employee-task-chart').parentNode.innerHTML = `
+                <div class="text-center text-muted py-5">
+                    <i class="fas fa-chart-bar fa-3x mb-3"></i>
+                    <p>No data available to display the chart</p>
+                    <p class="small">Add employees and assign tasks to view statistics</p>
+                </div>
+            `;
+            return;
+        }
+        
+        // Count tasks per employee
+        const employeeTaskCounts = {};
+        employees.slice(0, 5).forEach(employee => {
+            employeeTaskCounts[employee.name] = 0;
+        });
+        
+        tasks.forEach(task => {
+            if (employeeTaskCounts.hasOwnProperty(task.assignedTo)) {
+                employeeTaskCounts[task.assignedTo]++;
+            }
+        });
+        
+        // Create the chart
+        const ctx = document.getElementById('employee-task-chart').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: Object.keys(employeeTaskCounts),
+                datasets: [{
+                    label: 'Assigned Tasks',
+                    data: Object.values(employeeTaskCounts),
+                    backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1
+                        }
+                    }
+                }
+            }
+        });
+    }
+</script>
+{% endblock %}
